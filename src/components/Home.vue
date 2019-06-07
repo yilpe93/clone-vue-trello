@@ -16,13 +16,14 @@
     </div>
     <AddBoard
       v-if='isAddBoard'
-      @close='isAddBoard = false'
       @submit='onAddBoard' 
     ></AddBoard>
+      <!-- @close='isAddBoard = false' -->
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { board } from '../api'
 import AddBoard from './AddBoard'
 
@@ -35,8 +36,24 @@ export default {
       loading: false,
       boards: [],
       error: '',
-      isAddBoard: false
+      // isAddBoard: false
     }
+  },
+  // computed: {
+  //   isAddBoard() {
+  //     return this.$store.state.isAddBoard
+  //   }
+  // },
+
+  // # MapHellper => 이때, computed의 속성으로 따로 추가가 불가능 해지기에 ES6의 destructuring 문법을 사용한다.
+  // computed: mapState({
+  // }),
+
+  // # ES6..
+  computed: {
+    ...mapState([
+      'isAddBoard'
+    ])
   },
   methods: {
     fetchData() {
@@ -51,7 +68,7 @@ export default {
         })
     },
     addBoard() {
-      this.isAddBoard = true
+      // this.isAddBoard = true
     },
     onAddBoard(title) {
       board.create(title)
