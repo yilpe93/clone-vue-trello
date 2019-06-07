@@ -9,15 +9,22 @@ import NotFound from '@/components/NotFound'
 // middleware
 Vue.use(VueRouter)
 
+const requireAuth = (to, from, next) => {
+  const isAuth = localStorage.getItem('token')
+  const loginPath = `/login?returnPath=${encodeURIComponent(to.path)}`
+  isAuth ? next() : next(loginPath)
+}
+
 const router = new VueRouter({
   mode: "history",
   routes: [
-    { path: "/", component: Home },
+    { path: "/", component: Home, beforeEnter: requireAuth },
     { path: "/login", component: Login },
     { path: "/board/:id", 
-      component: Board, 
+      component: Board,
+      beforeEnter: requireAuth, 
       children: [
-        { path: "card/:id", component: Card }
+        { path: "card/:id", component: Card, beforeEnter: requireAuth }
       ]
     },
     { path: "*", component: NotFound }
