@@ -35,8 +35,7 @@ export default {
     return {
       loading: false,
       boards: [],
-      error: '',
-      // isAddBoard: false
+      error: ''
     }
   },
   // computed: {
@@ -51,9 +50,12 @@ export default {
 
   // # ES6..
   computed: {
-    ...mapState([
-      'isAddBoard'
-    ])
+    // ...mapState([
+    //   'isAddBoard'
+    // ])
+    ...mapState({
+      isAddBoard: 'isAddBoard'
+    })
   },
   methods: {
     ...mapMutations([
@@ -70,17 +72,12 @@ export default {
           this.loading = false;
         })
     },
-    onAddBoard(title) {
-      board.create(title)
-        .then(() => this.fetchData())
-        .catch(err => {
-          //eslint-disable-next-line
-          console.log(err)
-        })
+    onAddBoard() {
+      this.fetchData()
     }
   },
   created() {
-    this.fetchData();
+    this.fetchData()
   },
   updated() {
     // # 매번 호출이 되는데, created 다음에 호출되고 dataset이 변화를 감지하면 호출된다.
