@@ -23,8 +23,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import { board } from '../api'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import AddBoard from './AddBoard'
 
 export default {
@@ -34,7 +33,6 @@ export default {
   data() {
     return {
       loading: false,
-      boards: [],
       error: ''
     }
   },
@@ -50,27 +48,23 @@ export default {
 
   // # ES6..
   computed: {
-    // ...mapState([
-    //   'isAddBoard'
-    // ])
     ...mapState({
-      isAddBoard: 'isAddBoard'
+      isAddBoard: 'isAddBoard',
+      boards: 'boards'
     })
   },
   methods: {
     ...mapMutations([
       'SET_IS_ADD_BOARD'
     ]),
+    ...mapActions([
+      'FETCH_BAORDS'
+    ]),
     fetchData() {
       this.loading = true;
-      
-      board.fetch()
-        .then(data => {
-          this.boards = data.list
-        }) 
-        .finally(() => {
-          this.loading = false;
-        })
+      this.FETCH_BAORDS().finally(() => {
+        this.loading = false;
+      })
     },
     onAddBoard() {
       this.fetchData()

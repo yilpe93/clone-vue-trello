@@ -7,16 +7,26 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    isAddBoard: false
+    isAddBoard: false,
+    boards: []
   },
   mutations: {
     SET_IS_ADD_BOARD (state, toggle) {
       state.isAddBoard = toggle
+    },
+    SET_BOARDS (state, boards) {
+      state.boards = boards
     }
   },
   actions: {
     ADD_BOARD(_, { title }) {
       return api.board.create(title)
+    },
+    FETCH_BAORDS({ commit }) {
+      return api.board.fetch()
+        .then(data => {
+          commit('SET_BOARDS', data.list)
+        })
     }
   }
 })
@@ -25,7 +35,7 @@ export default store
 
 /*
   # State
-  
+
   # Mutations
   - `commit` 메소드를 통해서 사용
   - 대게 타입에 상수를 사용
